@@ -20,13 +20,17 @@ class App extends React.Component {
   }
 
   addMovieToWillWatch = (movie) => {
-    let movies = [...this.state.moviesWillWatch];
-    if(!movies.find(m=>m.id === movie.id)) {
-      movies.push(movie);
-      this.setState( {
-        moviesWillWatch: movies
-      });
-    }
+    let updateMovies = [...this.state.moviesWillWatch, movie];
+    this.setState( {
+      moviesWillWatch: updateMovies
+    });
+  }
+
+  removeMovieToWillWatch = (movie) => {
+    const updateMovies = this.state.moviesWillWatch.filter((item) => item.id !== movie.id);
+    this.setState({
+      moviesWillWatch: updateMovies
+    });
   }
 
   render() {
@@ -42,6 +46,7 @@ class App extends React.Component {
                       <MovieItem  movie={movie} 
                                   removeMovie={this.removeMovie} 
                                   addMovieToWillWatch = {this.addMovieToWillWatch}
+                                  removeMovieToWillWatch = {this.removeMovieToWillWatch}
                       />
                     </div>);
                 })
