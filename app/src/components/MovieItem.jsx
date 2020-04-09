@@ -18,7 +18,7 @@ class MovieItem extends React.Component {
                     alt="" />
                 <div className="card-body">
                     <h6 className="card-title">{movie.title}</h6>
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between align-items-center">
                         <p className="mb-0">Rating: {movie.vote_average}</p>
                         {
                             this.state.willWatch ?

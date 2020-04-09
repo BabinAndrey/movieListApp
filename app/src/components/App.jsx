@@ -1,17 +1,25 @@
 import React from 'react';
-import { moviesData } from '../moviesData'
 import MovieItem from './MovieItem';
+import {API_KEY_3} from '../utils/api'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      movies: moviesData,
+      movies: [],
       moviesWillWatch: [],
     };
   }
 
+  componentDidMount() {
+    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY_3}`).then(response=>response.json()).then((data)=> {
+      this.setState({
+        movies: data.results
+      });
+    });
+  }
+  
   removeMovie = (movie) => {
     const updateMovies = this.state.movies.filter((item) => item.id !== movie.id);
     this.setState({
@@ -21,7 +29,7 @@ class App extends React.Component {
 
   addMovieToWillWatch = (movie) => {
     let updateMovies = [...this.state.moviesWillWatch, movie];
-    this.setState( {
+    this.setState({
       moviesWillWatch: updateMovies
     });
   }
@@ -43,10 +51,10 @@ class App extends React.Component {
                 this.state.movies.map((movie) => {
                   return (
                     <div key={movie.id} className="col-6 mb-4">
-                      <MovieItem  movie={movie} 
-                                  removeMovie={this.removeMovie} 
-                                  addMovieToWillWatch = {this.addMovieToWillWatch}
-                                  removeMovieToWillWatch = {this.removeMovieToWillWatch}
+                      <MovieItem movie={movie}
+                        removeMovie={this.removeMovie}
+                        addMovieToWillWatch={this.addMovieToWillWatch}
+                        removeMovieToWillWatch={this.removeMovieToWillWatch}
                       />
                     </div>);
                 })
@@ -54,7 +62,17 @@ class App extends React.Component {
             </div>
           </div>
           <div className="col-3">
-            <p>Will Watch: {this.state.moviesWillWatch.length}</p>
+            <h4>Will Watch: {this.state.moviesWillWatch.length} movies</h4>
+            <ul className="list-group">
+              {this.state.moviesWillWatch.map(movie => (
+                <li key={movie.id} className="list-group-item">
+                  <div className="d-flex justify-content-between">
+                    <p>{movie.title}</p>
+                    <p>{movie.vote_average}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
