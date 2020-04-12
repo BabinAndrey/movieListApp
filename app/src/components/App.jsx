@@ -1,6 +1,8 @@
 import React from 'react';
 import MovieItem from './MovieItem';
-import {API_KEY_3} from '../utils/api'
+import MovieTabs from './MovieTabs';
+import Pagination from './Pagination';
+import { API_KEY_3 } from '../utils/api'
 
 class App extends React.Component {
   constructor(props) {
@@ -9,17 +11,23 @@ class App extends React.Component {
     this.state = {
       movies: [],
       moviesWillWatch: [],
+      sort_by: "popularity.desc",
+      page: 1,
+      total_pages: 0
     };
   }
 
   componentDidMount() {
-    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY_3}`).then(response=>response.json()).then((data)=> {
-      this.setState({
-        movies: data.results
-      });
-    });
+    this.getMovies();
   }
-  
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.sort_by !== this.state.sort_by || prevState.page !== this.state.page) {
+      console.log("App didUpdate");
+      this.getMovies();
+    }
+  }
+
   removeMovie = (movie) => {
     const updateMovies = this.state.movies.filter((item) => item.id !== movie.id);
     this.setState({
@@ -41,11 +49,53 @@ class App extends React.Component {
     });
   }
 
+  updateSortBy = (value) => {
+    this.setState({
+      sort_by: value
+    });
+  }
+
+  pageUp = () => {
+    if (this.state.page < this.state.total_pages) {
+      this.setState(function (state, props) {
+        return {
+          page: state.page + 1
+        }
+      });
+    }
+  }
+
+  pageDown = () => {
+    if (this.state.page > 1) {
+      this.setState(function (state, props) {
+        return {
+          page: state.page - 1
+        }
+      });
+    }
+  }
+
+  getMovies = () => {
+    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}&page=${this.state.page}`).then(response => response.json()).then((data) => {
+      this.setState({
+        movies: data.results,
+        page: data.page,
+        total_pages: data.total_pages
+      });
+    });
+  }
+
   render() {
+    console.log("App render");
     return (
       <div className="container">
         <div className="row">
           <div className="col-9">
+            <div className="row mb-4">
+              <div className="col-12">
+                <MovieTabs sort_by={this.state.sort_by} updateSortBy={this.updateSortBy} />
+              </div>
+            </div>
             <div className="row">
               {
                 this.state.movies.map((movie) => {
@@ -73,6 +123,9 @@ class App extends React.Component {
                 </li>
               ))}
             </ul>
+          </div>
+          <div className="row mb-4 container-fluid d-flex justify-content-center">
+            <Pagination page={this.state.page} total_pages={this.state.total_pages} pageUp={this.pageUp} pageDown={this.pageDown} />
           </div>
         </div>
       </div>
