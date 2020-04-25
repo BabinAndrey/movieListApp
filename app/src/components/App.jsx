@@ -3,6 +3,7 @@ import MovieItem from './MovieItem';
 import MovieTabs from './MovieTabs';
 import Pagination from './Pagination';
 import { API_KEY_3 } from '../utils/api'
+import '../stylesheets/common.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -88,19 +89,15 @@ class App extends React.Component {
   render() {
     console.log("App render");
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-9">
-            <div className="row mb-4">
-              <div className="col-12">
-                <MovieTabs sort_by={this.state.sort_by} updateSortBy={this.updateSortBy} />
-              </div>
-            </div>
-            <div className="row">
+      <div>
+        <div className="container">
+          <div className="movies">
+            <MovieTabs sort_by={this.state.sort_by} updateSortBy={this.updateSortBy} />
+            <div className="container">
               {
                 this.state.movies.map((movie) => {
                   return (
-                    <div key={movie.id} className="col-6 mb-4">
+                    <div key={movie.id} className="movie">
                       <MovieItem movie={movie}
                         removeMovie={this.removeMovie}
                         addMovieToWillWatch={this.addMovieToWillWatch}
@@ -111,7 +108,7 @@ class App extends React.Component {
               }
             </div>
           </div>
-          <div className="col-3">
+          <div className="watch-panel">
             <h4>Will Watch: {this.state.moviesWillWatch.length} movies</h4>
             <ul className="list-group">
               {this.state.moviesWillWatch.map(movie => (
@@ -124,10 +121,8 @@ class App extends React.Component {
               ))}
             </ul>
           </div>
-          <div className="row mb-4 container-fluid d-flex justify-content-center">
-            <Pagination page={this.state.page} total_pages={this.state.total_pages} pageUp={this.pageUp} pageDown={this.pageDown} />
-          </div>
         </div>
+        <Pagination page={this.state.page} total_pages={this.state.total_pages} pageUp={this.pageUp} pageDown={this.pageDown} />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import '../stylesheets/common.css';
 
 class MovieItem extends React.Component {
     constructor(props) {
@@ -45,8 +46,8 @@ class MovieItem extends React.Component {
                     alt="" />
                 <div className="card-body">
                     <h6 className="card-title">{movie.title}</h6>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <p className="mb-0">Rating: {movie.vote_average}</p>
+                    <div className="container space-between-wrap film-property">
+                        <p>Rating: {movie.vote_average}</p>
                         <button type="button" className={this.getButtonClassnames()} onClick={this.handleClick}>
                             {this.getButtonTitle()}
                         </button>
