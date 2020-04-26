@@ -90,7 +90,7 @@ class App extends React.Component {
     console.log("App render");
     return (
       <div>
-        <div className="container">
+        <div className="container content">
           <div className="movies">
             <MovieTabs sort_by={this.state.sort_by} updateSortBy={this.updateSortBy} />
             <div className="container">

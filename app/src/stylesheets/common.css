@@ -61,7 +61,7 @@ ul li {
         width: 100%;
     }
 
-    .container {
+    .container.content {
         display: block;
     }
 }
